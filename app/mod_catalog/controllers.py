@@ -45,16 +45,16 @@ def category_add():
     # add category to db
     db.session.add(category)
     db.session.commit()
-    flash('You have successfully added the category ' + form.name.data + '!')
+    flash('You have successfully added the category "' + form.name.data + '"!')
     form.name.data=''
-    # redirect to the login page
+    # redirect to the categories page
     return redirect(url_for('catalog.categories_list'))
 
   return render_template('catalog/category/add.html', form=form, title='Add Category')
 
 
-@mod_catalog.route('/category/edit/', methods=['GET', 'POST'])
-def category_edit():
+@mod_catalog.route('/category/edit/<category_id>', methods=['GET', 'POST'])
+def category_edit(category_id):
   """
   Handle requests to the /catalog/category/add/ route
   Add an category to the database
@@ -62,16 +62,15 @@ def category_edit():
   form = AddCategoryForm()
   category = Category.query.filter_by(id=category_id).first_or_404()
   if form.validate_on_submit():
-    category = Category(name=form.name.data, deactivated=False)
-    # add category to db
-    db.session.add(category)
+    # update category name in
+    category.name = form.name.data
     db.session.commit()
-    flash('You have successfully added the category ' + form.name.data + '!')
-    form.name.data=''
-    # redirect to the login page
+    flash('You have successfully updated the category "' + form.name.data + '"!')
+    # redirect to the categories page
     return redirect(url_for('catalog.categories_list'))
 
-  return render_template('catalog/category/add.html', form=form, title='Add Category')
+  form.name.data = category.name
+  return render_template('catalog/category/add.html', form=form, title='Edit Category')
 
 
 @mod_catalog.route('/category/delete/<category_id>', methods=['GET', 'POST'])

@@ -39,7 +39,7 @@ class AddCategoryForm(FlaskForm):
   Form to add a category to catalog
   """
   name   = StringField('Category Name', validators=[InputRequired()])
-  submit = SubmitField('Add Category')
+  submit = SubmitField('Save Category')
 
   def validate_name(self, field):
     if Category.query.filter_by(name=field.data).first():
