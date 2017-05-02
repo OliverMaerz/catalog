@@ -1,9 +1,8 @@
-{% include 'header.html' %}
+{% extends "base.html" %}
+{% block body %}
 
+<p>Welcome.</p>
 
-<p>Welcome. Welcome. Welcome.</p>
+<p>To go to the catalog please <a href="/catalog">click here</a>.</p>
 
-<p>To go to the catalog <a href="/catalog">click here</a>.</p>
-
-
-{% include 'footer.html' %}
+{% endblock %}

@@ -1,8 +1,14 @@
 # Import flask and template operators
-from flask import Flask, render_template
+from flask import Flask, render_template, flash
 
 # Import SQLAlchemy
 from flask_sqlalchemy import SQLAlchemy
+
+# Import Flask-Migrate for db migrations
+from flask_migrate import Migrate
+
+# Import Flask-Bootstrap for wtf and utils libraries
+from flask_bootstrap import Bootstrap
 
 # Define the WSGI application object
 app = Flask(__name__)
@@ -14,10 +20,16 @@ app.config.from_object('config')
 # by modules and controllers
 db = SQLAlchemy(app)
 
+# Define db migrations object
+migrate = Migrate(app, db)
+
+# Initiate Flask-Bootstrap ...
+Bootstrap(app)
+
 # Sample HTTP error handling
 @app.errorhandler(404)
 def not_found(error):
-    return render_template('404.html'), 404
+  return render_template('404.html'), 404
 
 # Import modules / components using their blueprint handler
 from app.mod_auth.controllers import mod_auth as auth_module

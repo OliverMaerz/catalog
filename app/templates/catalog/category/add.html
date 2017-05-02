@@ -1,4 +1,8 @@
 {% extends "base.html" %}
 {% block body %}
-Forgot PW ...
+
+<div>
+  {{ wtf.quick_form(form) }}
+</div>
+
 {% endblock %}

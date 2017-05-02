@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block body %}
 
-<div>Catalog Content</div>
+<div>
+  Are you sure?
+  {{ wtf.quick_form(form) }}
+</div>
 
 {% endblock %}
