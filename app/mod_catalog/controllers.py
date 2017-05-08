@@ -233,12 +233,8 @@ def items_list(category_slug, category_id):
         return redirect(url_for('catalog.catalog'))
     selected_category = category
 
-    items = Item.query.filter_by(category_id=category_id)\
-                      .join(Category)\
-                      .add_columns(Category.name,
-                                   Item.title,
-                                   Item.date_created,
-                                   Item.id).order_by(Item.date_created.desc())
+    # get all items in Category
+    items = Category.get_items_in_category(category_id)
     slugified_items = add_slugify(items)
 
     # check number of items
@@ -267,7 +263,7 @@ def item_edit(item_id):
 
     item = Item.query.filter_by(id=item_id).first_or_404()
 
-    # Checck if item was not created by user
+    # Check if item was not created by user
     if item.user_id != loggedin_user:
         flash('Item "' + item.title +
               '" was created by another user. \
@@ -277,15 +273,20 @@ def item_edit(item_id):
     form = AddItemForm(obj=item)
     if form.validate_on_submit():
         if (form.submit.data):
-            # update item data
-            form.populate_obj(item)
-            item.category_id = int(form.category.data.id)
-            db.session.commit()
-            flash('You have successfully updated the item "' +
-                  form.title.data + '".')
-            # redirect to the main catalog page
+            # Now check if category really exists!
+            if (Category.exists(int(form.category.data.id))):
+                # update item data
+                form.populate_obj(item)
+                item.category_id = int(form.category.data.id)
+                db.session.commit()
+                flash('You have successfully updated the item "' +
+                      form.title.data + '".')
+                # redirect to the main catalog page
 
-        return redirect(url_for('catalog.catalog'))
+                return redirect(url_for('catalog.catalog'))
+            else:
+                # fake category - return error message
+                flash('Please select a valid category.')
 
     # pre-select the category from the item.category_id field in the dropdown
     form.category.process_data(Category.query.filter_by(id=item.category_id)
@@ -308,19 +309,24 @@ def item_add():
     form = AddItemForm()
     if form.validate_on_submit():
         if (form.submit.data):
-            # set item data
-            item = Item(title=form.title.data,
-                        description=form.description.data,
-                        category_id=int(form.category.data.id),
-                        user_id=loggedin_user)
-            # now store it in db
-            db.session.add(item)
-            db.session.commit()
-            flash('You have successfully added the item "' +
-                  form.title.data + '".')
+            # Now check if category really exists!
+            if (Category.exists(int(form.category.data.id))):
+                # set item data
+                item = Item(title=form.title.data,
+                            description=form.description.data,
+                            category_id=int(form.category.data.id),
+                            user_id=loggedin_user)
+                # now store it in db
+                db.session.add(item)
+                db.session.commit()
+                flash('You have successfully added the item "' +
+                      form.title.data + '".')
 
-        # redirect to the catalog page
-        return redirect(url_for('catalog.catalog'))
+                # redirect to the catalog page
+                return redirect(url_for('catalog.catalog'))
+            else:
+                # fake category - return error message
+                flash('Please select a valid category.')
 
     return render_template('catalog/item/add.html',
                            form=form,
@@ -355,7 +361,7 @@ def item_delete(item_id):
             db.session.commit()
 
             flash('You have successfully deleted the item "' +
-                  tem.title + '".')
+                  item.title + '".')
         else:
             flash('Item not deleted.')
 

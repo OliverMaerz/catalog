@@ -30,6 +30,25 @@ class Category(Base):
     def __repr__(self):
         return '<Category %r>' % (self.name)
 
+    # Check if a dategory defined by category_id exists in db
+    @staticmethod
+    def exists(category_id):
+        if Category.query.filter_by(id=category_id):
+            return True
+        else:
+            return False
+
+    # Get all items from a given category
+    @staticmethod
+    def get_items_in_category(category_id):
+        return Item.query.filter_by(category_id=category_id)\
+                         .join(Category)\
+                         .add_columns(Category.name,
+                                      Item.title,
+                                      Item.date_created,
+                                      Item.id).order_by(
+                                          Item.date_created.desc())
+
 
 # Define a Item model for catalog
 class Item(Base):
