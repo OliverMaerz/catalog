@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 {% block body %}
-
-<div>
-  {{ wtf.quick_form(form) }}
+<div class="row">
+  <div class="col-sm-12 category_form">
+    {{ form.csrf_token }}
+    {{ wtf.quick_form(form) }}
+  </div>
 </div>
 
 {% endblock %}

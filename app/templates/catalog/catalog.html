@@ -1,6 +1,28 @@
+{# Main Catalog Page (Items, Latest Items) #}
 {% extends "base.html" %}
 {% block body %}
 
-<div>Catalog Content</div>
+<div class="row">
+  <div class="col-sm-3 catalog-sidebar">
+    <h4>Categories</h4>
+    <ul>
+    {% for category in categories %}
+      <li><a href="/catalog/c/{{ category.slugified_name }}/{{ category.id }}/">{{ category.name }}</a></li>
+    {% endfor %}
+    </ul>
+  </div>
+  <div class="col-sm-9 catalog-items">
+    <h4>{{ item_title }}</h4>
+    <ul>
+    {% for item in items %}
+      <li>
+        <a href="/catalog/i/{{ item.slugified_category }}/{{ item.slugified_title }}/{{ item.id }}/">{{ item.title }}</a>
+        {% if not hide_category %} ({{ item.name }}) {% endif %}
+      </li>
+    {% endfor %}
+    </ul>
+    {% if session['user_id'] %} <a href="/catalog/item/add/">[Add Item]</a>{% endif %}
+  </div>
+</div>
 
 {% endblock %}

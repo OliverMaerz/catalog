@@ -87,3 +87,7 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+app/mod_google_auth/client_secret.json
+
+app/config/client_secrets.json

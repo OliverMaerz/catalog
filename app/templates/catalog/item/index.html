@@ -1,0 +1,16 @@
+{# Template to display details of items #}
+{% extends "base.html" %}
+{% block body %}
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="item_description">
+      <strong>Description:</strong> {{ item.description }}
+    </div>
+    <div class="item_links">
+      {% if session['user_id'] %} <a href="/catalog/item/edit/{{ item.id }}">[Edit]</a>  <a href="/catalog/item/delete/{{ item.id }}">[Delete]</a> {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

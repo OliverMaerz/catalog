@@ -1,3 +1,4 @@
+{# Base template with the header and footer etc. used by all other templates #}
 {% import "bootstrap/wtf.html" as wtf %}
 {% import "bootstrap/utils.html" as utils %}
 <!DOCTYPE html>
@@ -18,48 +19,56 @@
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand" href="/">The Catalog App</a>
+    <a class="navbar-brand" href="/catalog/">The Catalog App</a>
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-        </li>
         <li class="nav-item">
-          <a class="nav-link" href="/catalog/">Catalog</a>
+          <a class="nav-link" href="/catalog/">Home</a>
         </li>
+        {% if session['user_id'] %}
         <li class="nav-item">
-          <a class="nav-link" href="/auth/signin/">Login</a>
+          <a class="nav-link" href="/catalog/category/">Edit Categories</a>
         </li>
+        {% endif %}
       </ul>
-      <!--form method="POST" action="/auth/signin/" accept-charset="UTF-8" role="form" class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="text" placeholder="Your Email Address" name="email">
-        <input class="form-control mr-sm-2" type="password" placeholder="Your Password" name="password">
-        <button type="submit" name="submit" class="btn my-2 my-sm-0">Sign in</button>
-      </form-->
+      {% if session['user_id'] %}
+      <a href="/google_auth/logout/" class="btn btn-info" role="button">Logout</a>
+      {% else %}
+      <a href="/google_auth/login/" class="btn btn-info" role="button">Login</a>
+      {% endif %}
     </div>
   </nav>
   <!-- Main jumbotron for a primary marketing message or call to action -->
   <div class="jumbotron">
     <div class="container">
-      <h1 class="display-3">The Catalog App</h1>
-      <p>The Catalog App is an app to maintain a simple catalog. Enjoy ;)</p>
+      <h1 class="display-3">{{ title }}</h1>
     </div>
   </div>
   <div class="container">
-    {{ utils.flashed_messages() }}
-    <h2>{{ title }}</h2>
+    <div class="row">
+      <div class="col-sm-12">
+        {{ utils.flashed_messages() }}
+      </div>
+    </div>
+    {# This is where the other templates include their content #}
+
     {% block body %}
     {% endblock %}
-    <hr>
+
     <footer>
-      <p>Copyright &copy; 2017 Oliver Maerz. All rights reserved.</p>
+      <div class="row">
+        <div class="col-sm-12">
+          <hr>
+          Copyright &copy; 2017 Oliver Maerz. All rights reserved.
+        </div>
+      </div>
     </footer>
   </div>
   <!-- /container -->
   <!-- Bootstrap core JavaScript -->
-  <script src="/static/js/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
-  <script src="/static/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-  <script src="/static/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+  <script src="/static/js/jquery-3.2.1.min.js"></script>
+  <script src="/static/js/tether.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
 </body>
 
 </html>
