@@ -2,17 +2,17 @@
 
 Very simple Catalog App written in python for a Udacity course. 
 
-App is currently setup for postgress. Setup an empty database on postgress an configure db name, credentials etc. in config.py ``SQLALCHEMY_DATABASE_URI = 'postgresql://user:password@localhost/catalog'``. The tables will be automatically created the first time the app is run (see below.)
+The app is currently setup for postgress. Setup an empty database on your postgress an configure db name, credentials etc. in config.py ``SQLALCHEMY_DATABASE_URI = 'postgresql://user:password@localhost/catalog'``. The tables will be automatically created the first time the app is run (see below.)
 
-The app uses Google Oauth 2.0 for authentication. Setup Google Oauth by configuring the client ID in app/google_auth/controller.py ``googleauth_id = '< YOUR GOOGLE OAUTH ID >'`` and then by copying the client secret to app/config/client_secret.json. For more info and details on how to generate the credentials please visit: https://developers.google.com/identity/protocols/OAuth2
+The app uses Google Oauth 2.0 for authentication. You can setup Google Oauth by configuring the client ID in app/google_auth/controller.py ``googleauth_id = '< YOUR GOOGLE OAUTH ID >'`` and then by copying the client secret to app/config/client_secret.json. For more info and details on how to generate the credentials please visit: https://developers.google.com/identity/protocols/OAuth2
 
-Libraries, python 2.7 etc. are included in the env directory (for example to run it on the Udacity vagrant virtual machine). The app can then be run with ``./env/bin/python run.py``. Or alternatively -- to setup your own environment -- see the required libraries in the requirements.txt file and run run.py from your own environment. 
+Libraries, python 2.7 etc. are included in the env directory (for example to run it on the Udacity vagrant virtual machine). The app can then be run with ``./env/bin/python run.py``. Or alternatively - to setup your own environment - see the required libraries in the requirements.txt file and run run.py from your own environment. 
 
-The first time you run run.py the database tables will be setup and you are ready to go. Once the website is running create some categories by logging in and then selecting the "Edit Categories" menu. Then items via the "Add item" menu (requires at least one category).
+The first time you run 'run.py' the database tables will be setup automatically and you are ready to go. Once the website is running create some categories by logging in and then selecting the "Edit Categories" menu. Next create some items via the "Add item" menu (requires at least one category).
 
-If using Udacity's vagrant virtual server then the default url should be http://localhost:8000/ and the JSON endpoint should be at http://localhost:8000/catalog/json/ 
+If using Udacity's vagrant virtual machine then the default url should be http://localhost:8000/ and the JSON endpoint should be at http://localhost:8000/catalog/json/ 
 
-Alternatively you can load some sample categories on your postgres server with the following sql:
+You can also load some sample categories directly on your postgres server with the following sql:
 
 ```
 INSERT INTO "public"."category"("id","date_created","date_modified","name")
@@ -28,7 +28,7 @@ VALUES
 (3,E'2017-05-08 01:43:55.012303',E'2017-05-08 01:43:55.012303',E'Soccer');
 ```
 
-For testing you can also load some sample catalog items directly on your postgres with the sql below. But make sure you log into the website at least once first, so the user with the user.id '1' is created.  
+You can also load some sample items directly on your postgres db with the sql below. But make sure you log into the website at least once first - so the user with the user.id '1' is created.  
 
 ```
 INSERT INTO "public"."item"("id","date_created","date_modified","title","description","category_id","user_id")
