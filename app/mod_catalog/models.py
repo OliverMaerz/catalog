@@ -1,6 +1,9 @@
 # Import  database object (db) from main application module
 from app import db
 
+# Import library to convert item name and category name in url-safe and
+# readable/indexable slugs
+from slugify import slugify
 
 # Define base model for other database tables to inherit
 class Base(db.Model):
@@ -23,24 +26,33 @@ class Category(Base):
     # Category name
     name = db.Column(db.String(128),  nullable=False,  unique=True)
 
-    # New instance instantiation procedure
     def __init__(self, name):
+        """
+        New instance instantiation procedure
+        """
         self.name = name
 
     def __repr__(self):
+        """
+        Return represantation <Category ...>
+        """
         return '<Category %r>' % (self.name)
 
-    # Check if a dategory defined by category_id exists in db
     @staticmethod
     def exists(category_id):
+        """
+        Check if a dategory defined by category_id exists in db
+        """
         if Category.query.filter_by(id=category_id):
             return True
         else:
             return False
 
-    # Get all items from a given category
     @staticmethod
     def get_items_in_category(category_id):
+        """
+        Get all items from a given category
+        """
         return Item.query.filter_by(category_id=category_id)\
                          .join(Category)\
                          .add_columns(Category.name,
@@ -48,6 +60,28 @@ class Category(Base):
                                       Item.date_created,
                                       Item.id).order_by(
                                           Item.date_created.desc())
+
+    @staticmethod
+    def get_categories():
+        """
+        Query and return all categories from db and add slugified names
+        """
+        categories = Category.query.order_by(Category.name)
+
+        new_list = []
+
+        class NewCategory(object):
+            pass
+
+        # now loop through the categories and add slugified name
+        for category in categories:
+            new_category = NewCategory()
+            new_category.slugified_name = slugify(category.name)
+            new_category.name = category.name
+            new_category.id = category.id
+            new_list.append(new_category)
+
+        return new_list
 
 
 # Define a Item model for catalog

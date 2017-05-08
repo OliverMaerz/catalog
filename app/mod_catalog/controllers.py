@@ -21,28 +21,6 @@ mod_catalog = Blueprint('catalog', __name__, url_prefix='/catalog')
 
 # helper functions
 
-def get_categories():
-    """
-    Query and return all categories from db and add slugified names
-    """
-    categories = Category.query.order_by(Category.name)
-
-    new_list = []
-
-    class NewCategory(object):
-        pass
-
-    # now loop through the categories and add slugified name
-    for category in categories:
-        new_category = NewCategory()
-        new_category.slugified_name = slugify(category.name)
-        new_category.name = category.name
-        new_category.id = category.id
-        new_list.append(new_category)
-
-    return new_list
-
-
 def add_slugify(items):
     """
     Add slugified item names and category names to list of items
@@ -80,7 +58,7 @@ def catalog():
     Handle requests to the /category/ and /catalog/index/ route
     List latest items and all categories
     """
-    categories = get_categories()
+    categories = Category.get_categories()
     latest_items = Item.query.join(Category)\
                              .add_columns(Category.name, Item.title,
                                           Item.date_created, Item.id)\
@@ -101,7 +79,7 @@ def categories_list():
     Handle requests to /catalog/category/ and /catalog/category/index/
     List all categories
     """
-    categories = get_categories()
+    categories = Category.get_categories()
     return render_template('catalog/category/list.html',
                            categories=categories,
                            title='Categories')
@@ -156,12 +134,12 @@ def category_edit(category_id):
             flash('You have successfully updated the category "' +
                   form.name.data + '".')
 
-            # redirect to the categories page
-            return redirect(url_for('catalog.categories_list'))
+        # redirect to the categories page
+        return redirect(url_for('catalog.categories_list'))
 
-        return render_template('catalog/category/add.html',
-                               form=form,
-                               title='Edit Category')
+    return render_template('catalog/category/add.html',
+                            form=form,
+                            title='Edit Category')
 
 
 @mod_catalog.route('/category/delete/<category_id>',
@@ -222,7 +200,7 @@ def items_list(category_slug, category_id):
     Handle requests to the /category/list/<category>/<category_id> route
     Show item from the catalog based on selected category
     """
-    categories = get_categories()
+    categories = Category.get_categories()
 
     # find the category name for the selected category id
     for category in categories:
