@@ -2,13 +2,15 @@
 
 Very simple Catalog App written in python for a Udacity course. 
 
+The required libraries are listed in the requirements.txt file.
+
 The app is currently setup for postgress. Setup an empty database on your postgress an configure db name, credentials etc. in config.py ``SQLALCHEMY_DATABASE_URI = 'postgresql://user:password@localhost/catalog'``. The tables will be automatically created the first time the app is run (see below.)
 
 The app uses Google Oauth 2.0 for authentication. You can setup Google Oauth by configuring the client ID in app/google_auth/controller.py ``googleauth_id = '< YOUR GOOGLE OAUTH ID >'`` and then by copying the client secret to app/config/client_secret.json. For more info and details on how to generate the credentials please visit: https://developers.google.com/identity/protocols/OAuth2
 
-Libraries, python 2.7 etc. are included in the env directory (for example to run it on the Udacity vagrant virtual machine). The app can then be run with ``./env/bin/python run.py``. Or alternatively - to setup your own environment - see the required libraries in the requirements.txt file and run run.py from your own environment. 
+To start the app run 'run.py'. 
 
-The first time you run 'run.py' the database tables will be setup automatically and you are ready to go. Once the website is running create some categories by logging in and then selecting the "Edit Categories" menu. Next create some items via the "Add item" menu (requires at least one category).
+The first time you run 'run.py' the database tables will be setup automatically and you are ready to go. Once the website is running create some categories by logging in and then selecting the "Edit Categories" menu. Next create some items via the "Add Item" menu (requires at least one category).
 
 If using Udacity's vagrant virtual machine then the default url should be http://localhost:8000/ and the JSON endpoint should be at http://localhost:8000/catalog/json/ 
 
